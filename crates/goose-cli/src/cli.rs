@@ -29,6 +29,8 @@ use crate::commands::schedule::{
     handle_schedule_run_now, handle_schedule_services_status, handle_schedule_services_stop,
     handle_schedule_sessions,
 };
+use crate::commands::agent::{handle_agent_command, AgentCommand};
+use crate::commands::project::{handle_project_command, ProjectCommand};
 use crate::commands::session::{handle_session_list, handle_session_remove};
 use crate::commands::skills::handle_skills_list;
 use crate::recipes::extract_from_cli::extract_recipe_info_from_cli;
@@ -1216,6 +1218,20 @@ enum Command {
             help = "JSON probe script; use - for stdin"
         )]
         script: Option<String>,
+    },
+
+    /// Manage platform projects
+    #[command(about = "Manage local AI team platform projects")]
+    Project {
+        #[command(subcommand)]
+        command: ProjectCommand,
+    },
+
+    /// Manage platform agent definitions
+    #[command(about = "Manage agent definitions scoped to a project")]
+    Agent {
+        #[command(subcommand)]
+        command: AgentCommand,
     },
 }
 
@@ -2951,6 +2967,8 @@ pub async fn cli() -> anyhow::Result<()> {
             }
         }
         Some(Command::McpProbe { extension, script }) => handle_mcp_probe(extension, script).await,
+        Some(Command::Project { command }) => handle_project_command(command).await,
+        Some(Command::Agent { command }) => handle_agent_command(command).await,
         None => handle_default_session().await,
     }
 }

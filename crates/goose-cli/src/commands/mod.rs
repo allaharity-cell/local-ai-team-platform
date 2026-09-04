@@ -19,3 +19,5 @@ pub mod skills;
 pub mod term;
 #[cfg(feature = "update")]
 pub mod update;
+pub mod agent;
+pub mod project;
