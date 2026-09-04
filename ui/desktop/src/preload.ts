@@ -4,6 +4,14 @@ import type { GooseApp } from './types/apps';
 import type { Settings, SettingKey } from './utils/settings';
 import { defaultSettings } from './utils/settings';
 import type { OpenExternalUrlResult } from './utils/urlSecurity';
+import type {
+  Project,
+  CreateProjectInput,
+  UpdateProjectInput,
+  AgentDefinition,
+  CreateAgentInput,
+  UpdateAgentInput,
+} from './types/platform.types';
 
 // Mapping from settings keys to their old localStorage keys for lazy migration
 const localStorageKeyMap: Partial<Record<SettingKey, string>> = {
@@ -184,6 +192,20 @@ type ElectronAPI = {
   getGitBranchInfo: (dir: string) => Promise<{ branch: string } | null>;
   listGitBranches: (dir: string) => Promise<string[]>;
   switchGitBranch: (dir: string, branch: string) => Promise<{ success: boolean; error?: string }>;
+  // Platform: Projects
+  listProjects: (includeArchived?: boolean) => Promise<Project[]>;
+  getProject: (id: string) => Promise<Project | null>;
+  createProject: (input: CreateProjectInput) => Promise<Project>;
+  updateProject: (id: string, input: UpdateProjectInput) => Promise<Project>;
+  archiveProject: (id: string) => Promise<Project>;
+  deleteProject: (id: string) => Promise<boolean>;
+  // Platform: Agents
+  listAgents: (projectId: string, includeArchived?: boolean) => Promise<AgentDefinition[]>;
+  getAgent: (id: string) => Promise<AgentDefinition | null>;
+  createAgent: (input: CreateAgentInput) => Promise<AgentDefinition>;
+  updateAgent: (id: string, input: UpdateAgentInput) => Promise<AgentDefinition>;
+  archiveAgent: (id: string) => Promise<AgentDefinition>;
+  deleteAgent: (id: string) => Promise<boolean>;
 };
 
 type AppConfigAPI = {
@@ -347,6 +369,25 @@ const electronAPI: ElectronAPI = {
   listGitBranches: (dir: string) => ipcRenderer.invoke('list-git-branches', dir),
   switchGitBranch: (dir: string, branch: string) =>
     ipcRenderer.invoke('switch-git-branch', dir, branch),
+  // Platform: Projects
+  listProjects: (includeArchived?: boolean) =>
+    ipcRenderer.invoke('platform:list-projects', includeArchived),
+  getProject: (id: string) => ipcRenderer.invoke('platform:get-project', id),
+  createProject: (input: CreateProjectInput) =>
+    ipcRenderer.invoke('platform:create-project', input),
+  updateProject: (id: string, input: UpdateProjectInput) =>
+    ipcRenderer.invoke('platform:update-project', id, input),
+  archiveProject: (id: string) => ipcRenderer.invoke('platform:archive-project', id),
+  deleteProject: (id: string) => ipcRenderer.invoke('platform:delete-project', id),
+  // Platform: Agents
+  listAgents: (projectId: string, includeArchived?: boolean) =>
+    ipcRenderer.invoke('platform:list-agents', projectId, includeArchived),
+  getAgent: (id: string) => ipcRenderer.invoke('platform:get-agent', id),
+  createAgent: (input: CreateAgentInput) => ipcRenderer.invoke('platform:create-agent', input),
+  updateAgent: (id: string, input: UpdateAgentInput) =>
+    ipcRenderer.invoke('platform:update-agent', id, input),
+  archiveAgent: (id: string) => ipcRenderer.invoke('platform:archive-agent', id),
+  deleteAgent: (id: string) => ipcRenderer.invoke('platform:delete-agent', id),
 };
 
 function getAppLocale(): unknown {

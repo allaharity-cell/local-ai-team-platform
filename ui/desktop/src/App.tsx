@@ -42,6 +42,8 @@ import RecipesView from './components/recipes/RecipesView';
 import SkillsView from './components/skills/SkillsView';
 import AppsView from './components/apps/AppsView';
 import StandaloneAppView from './components/apps/StandaloneAppView';
+import { ProjectsView } from './components/projects/ProjectsView';
+import { ProjectDetailView } from './components/projects/ProjectDetailView';
 import { View, ViewOptions } from './utils/navigationUtils';
 
 import { useNavigation } from './hooks/useNavigation';
@@ -672,6 +674,8 @@ export function AppInner() {
               <Route path="recipes" element={<RecipesRoute />} />
               <Route path="skills" element={<SkillsRoute />} />
               <Route path="permission" element={<PermissionRoute />} />
+              <Route path="projects" element={<ProjectsView />} />
+              <Route path="projects/:projectId" element={<ProjectDetailView />} />
             </Route>
           </Routes>
         </div>

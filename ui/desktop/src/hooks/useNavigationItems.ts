@@ -2,6 +2,7 @@ import {
   AppWindow,
   Clock,
   FileText,
+  FolderGit2,
   History,
   MessageSquarePlus,
   Puzzle,
@@ -23,6 +24,7 @@ export interface NavItem {
 /** Top-level nav items (excluding Settings which is pinned to the bottom). */
 export const NAV_ITEMS: NavItem[] = [
   { id: 'home', path: '/', label: 'New Chat', icon: MessageSquarePlus },
+  { id: 'projects', path: '/projects', label: 'Projects', icon: FolderGit2 },
   { id: 'recipes', path: '/recipes', label: 'Recipes', icon: FileText },
   { id: 'skills', path: '/skills', label: 'Skills', icon: Zap },
   { id: 'apps', path: '/apps', label: 'Apps', icon: AppWindow },
@@ -45,6 +47,10 @@ const navItemMessages = defineMessages({
   home: {
     id: 'navigation.itemHome',
     defaultMessage: 'New Chat',
+  },
+  projects: {
+    id: 'navigation.itemProjects',
+    defaultMessage: 'Projects',
   },
   recipes: {
     id: 'navigation.itemRecipes',

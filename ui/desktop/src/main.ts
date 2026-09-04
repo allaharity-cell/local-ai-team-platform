@@ -55,6 +55,7 @@ import {
 import { UPDATES_ENABLED } from './updates';
 import './utils/gitBranchIpc';
 import './utils/recipeHash';
+import { registerPlatformIpcHandlers } from './platform/platformStore';
 import type { GooseApp } from './types/apps';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { WEB_PROTOCOLS } from './utils/urlSecurity';
@@ -2463,6 +2464,7 @@ async function appMain() {
   await ensureWinShims();
 
   registerUpdateIpcHandlers();
+  registerPlatformIpcHandlers();
 
   // Handle microphone permission requests
   session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
